@@ -14,6 +14,7 @@ func Migrate() {
 		panic("failed to connect database")
 	}
 
+	db.AutoMigrate(&model.User{})
 	db.AutoMigrate(&model.Wish{})
 	db.AutoMigrate(&model.WishList{})
 
@@ -23,6 +24,14 @@ func Migrate() {
 
 	if !db.Migrator().HasConstraint(&model.Wish{}, "fk_wish_list_wishes") {
 		db.Migrator().CreateConstraint(&model.Wish{}, "fk_wish_list_wishes")
+	}
+
+	if !db.Migrator().HasConstraint(&model.WishList{}, "UserId") {
+		db.Migrator().CreateConstraint(&model.WishList{}, "UserId")
+	}
+
+	if !db.Migrator().HasConstraint(&model.User{}, "fk_wish_list_user") {
+		db.Migrator().CreateConstraint(&model.User{}, "fk_wish_list_user")
 	}
 
 }
